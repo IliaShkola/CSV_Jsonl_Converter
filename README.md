@@ -24,7 +24,7 @@ python -m venv myenv
 myenv\Scripts\activate
 ```
 
-5. Update pip
+5. Upgrade pip
 ```
 python.exe -m pip install --upgrade pip
 ```
