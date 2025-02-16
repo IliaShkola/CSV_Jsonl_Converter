@@ -50,3 +50,6 @@ The .csv file containing training data should include two columns: 'Prompt' and 
 
 ![image](https://github.com/user-attachments/assets/619377fb-29e9-4546-8193-063d1840a38b)
 
+Important
+---
+Please do not use training data from the TestData directory in a real fine-tuning project!
