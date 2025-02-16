@@ -1,0 +1,51 @@
+Prompt,Answer
+"How can I make all walls in my Revit model feel ""supported""?","walls = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Walls).ToElements()
+for wall in walls:
+    wall.LookupParameter(""Comments"").Set(""You're doing great! Keep standing strong!"")"
+How do I make all doors in my model float 2 meters above the floor?,"doors = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Doors).ToElements()
+for door in doors:
+    loc = door.Location.Point
+    new_loc = XYZ(loc.X, loc.Y, loc.Z + 2)
+    door.Location.Point = new_loc  # Warning: May cause unexpected ghost entrances!"
+How do I delete all columns in my project to see if the building collapses?,"columns = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Columns).ToElements()
+t = Transaction(doc, ""Delete All Columns"")
+t.Start()
+for col in columns:
+    doc.Delete(col.Id)
+t.Commit()"
+How can I teleport all stairs to the rooftop for maximum confusion?,"stairs = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Stairs).ToElements()
+for stair in stairs:
+    loc = stair.Location.Point
+    new_loc = XYZ(loc.X, loc.Y, loc.Z + 50)  # Boom! Straight to the roof.
+    stair.Location.Point = new_loc"
+How do I make all windows completely invisible?,"windows = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Windows).ToElements()
+for window in windows:
+    window.LookupParameter(""Material"").Set(None)  # Transparency Level: 100%"
+"What happens if I set all wall heights to 1,000 meters?","walls = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Walls).ToElements()
+for wall in walls:
+    wall.LookupParameter(""Unconnected Height"").Set(1000)"
+"How do I place a tiny chair at 1,000,000 meters away for no reason at all?","family_symbol = FilteredElementCollector(doc).OfClass(FamilySymbol).FirstElement()
+new_location = XYZ(1000000, 1000000, 1000000)  # The farthest chair in the universe.
+t = Transaction(doc, ""Place Tiny Chair in Space"")
+t.Start()
+doc.Create.NewFamilyInstance(new_location, family_symbol, StructureType.NonStructural)
+t.Commit()"
+How can I randomly change all wall colors every time I run the script?,"import random
+walls = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Walls).ToElements()
+for wall in walls:
+    color = random.randint(0, 255)
+    wall.LookupParameter(""Material"").Set(f""RGB({color}, {color}, {color})"")"
+How do I rotate all furniture randomly so no one knows which way to sit?,"import random
+furniture = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Furniture).ToElements()
+for item in furniture:
+    random_angle = random.uniform(0, 360)  # Degrees
+    item.Location.Rotate(Plane.CreateByNormalAndOrigin(XYZ.BasisZ, item.Location.Point), random_angle)
+"
+How do I duplicate every door 10 times?,"doors = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Doors).ToElements()
+t = Transaction(doc, ""Clone Doors"")
+t.Start()
+for door in doors:
+    for _ in range(10):
+        doc.Create.NewFamilyInstance(door.Location.Point, door.Symbol, StructureType.NonStructural)
+t.Commit()
+"
