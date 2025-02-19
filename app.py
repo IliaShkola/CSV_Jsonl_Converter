@@ -2,18 +2,20 @@ import sys
 import csv
 import json
 import os
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QLabel, QVBoxLayout, QWidget, QPlainTextEdit, QPushButton
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QLabel, QVBoxLayout, QWidget, QPlainTextEdit, QPushButton
 from PyQt5.QtCore import Qt
 
 
 class DragDropWidget(QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setAcceptDrops(True)  # Enable drag-and-drop
+        self.setAcceptDrops(True)
         self.setText("Drag & Drop CSV File Here")
         self.setAlignment(Qt.AlignCenter)
         self.setStyleSheet("border: 2px dashed #aaa; padding: 20px; font-size: 14px;")
-        self.parent_widget = parent  # Store a reference to parent to avoid NoneType crashes
+
+        # Store a reference to parent to avoid NoneType crashes
+        self.parent_widget = parent
 
     def dragEnterEvent(self, event):
         """Handles drag enter event."""
@@ -61,10 +63,16 @@ class MyApp(QMainWindow):
         layout.addWidget(self.plainTextEdit)
 
         # Export JSONL Button
-        self.but_jsonl_export = QPushButton("Export JSONL", self)
+        self.but_jsonl_export = QPushButton("Export JSONL (OpenAI)", self)
         self.but_jsonl_export.setFixedHeight(50)
         self.but_jsonl_export.clicked.connect(self.export_jsonl)
         layout.addWidget(self.but_jsonl_export)
+
+        # Export JSON Button
+        self.but_json_export = QPushButton("Export JSON (Alpaca)", self)
+        self.but_json_export.setFixedHeight(50)
+        self.but_json_export.clicked.connect(self.export_json)
+        layout.addWidget(self.but_json_export)
 
         self.show()
 
@@ -91,7 +99,7 @@ class MyApp(QMainWindow):
             self.drag_drop_widget.setText("Drag & Drop CSV File Here")
 
     def export_jsonl(self):
-        """Export CSV data to JSONL format."""
+        """Export CSV data to JSONL format. OpenAI structure."""
         if not self.csvFile:
             QMessageBox.critical(self, "Error", "No uploaded CSV file. Please upload a CSV file first.")
             return
@@ -106,22 +114,24 @@ class MyApp(QMainWindow):
             "content": system_message_content
         }
 
-        output_jsonl_file = os.path.splitext(self.csvFile)[0] + ".jsonl"
+        output_jsonl_file = os.path.splitext(self.csvFile)[0] + "_openai.jsonl"
 
         try:
             with open(self.csvFile, mode='r', encoding='utf-8') as csv_file, open(output_jsonl_file, mode='w', encoding='utf-8') as jsonl_file:
                 csv_reader = csv.DictReader(csv_file)
                 for row in csv_reader:
-                    prompt = row.get("Prompt", "").strip()
-                    answer = row.get("Answer", "").strip()
-                    if not prompt or not answer:
-                        continue  # Skip empty rows
+                    user_prompt = row.get("Prompt", "").strip()
+                    assistant_answer = row.get("Answer", "").strip()
+
+                    # Skip empty rows
+                    if not user_prompt or not assistant_answer:
+                        continue
 
                     jsonl_entry = {
                         "messages": [
                             system_message,
-                            {"role": "user", "content": prompt},
-                            {"role": "assistant", "content": answer}
+                            {"role": "user", "content": user_prompt},
+                            {"role": "assistant", "content": assistant_answer}
                         ]
                     }
                     jsonl_file.write(json.dumps(jsonl_entry) + '\n')
@@ -131,6 +141,44 @@ class MyApp(QMainWindow):
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to export JSONL file: {e}")
+
+    def export_json(self):
+        """Export CSV data to JSON format (Alpaca structure)."""
+
+        if not self.csvFile:
+            QMessageBox.critical(self, "Error", "No uploaded CSV file. Please upload a CSV file first.")
+            return
+
+        output_json_file = os.path.splitext(self.csvFile)[0] + "_alpaca.json"
+
+        try:
+            with open(self.csvFile, mode='r', encoding='utf-8') as csv_file, open(output_json_file, mode='w',
+                                                                                  encoding='utf-8') as json_file:
+                csv_reader = csv.DictReader(csv_file)
+                json_data = []
+
+                for row in csv_reader:
+                    prompt = row.get("Prompt", "").strip()
+                    answer = row.get("Answer", "").strip()
+                    if not prompt or not answer:
+                        continue
+
+                    # Convert to Alpaca format
+                    json_entry = {
+                        "instruction": prompt,
+                        # Alpaca format requires an "input" field (empty here)
+                        "input": "",
+                        "output": answer
+                    }
+                    json_data.append(json_entry)
+
+                json.dump(json_data, json_file, indent=4, ensure_ascii=False)
+
+            QMessageBox.information(self, "Success", f"Exported JSON file: {output_json_file}")
+            print(f"Converted {self.csvFile} to {output_json_file} successfully!")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to export JSON file: {e}")
 
 
 if __name__ == "__main__":
