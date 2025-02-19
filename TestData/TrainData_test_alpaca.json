@@ -1,0 +1,52 @@
+[
+    {
+        "instruction": "How can I make all walls in my Revit model feel \"supported\"?",
+        "input": "",
+        "output": "walls = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Walls).ToElements()\nfor wall in walls:\n    wall.LookupParameter(\"Comments\").Set(\"You're doing great! Keep standing strong!\")"
+    },
+    {
+        "instruction": "How do I make all doors in my model float 2 meters above the floor?",
+        "input": "",
+        "output": "doors = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Doors).ToElements()\nfor door in doors:\n    loc = door.Location.Point\n    new_loc = XYZ(loc.X, loc.Y, loc.Z + 2)\n    door.Location.Point = new_loc  # Warning: May cause unexpected ghost entrances!"
+    },
+    {
+        "instruction": "How do I delete all columns in my project to see if the building collapses?",
+        "input": "",
+        "output": "columns = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Columns).ToElements()\nt = Transaction(doc, \"Delete All Columns\")\nt.Start()\nfor col in columns:\n    doc.Delete(col.Id)\nt.Commit()"
+    },
+    {
+        "instruction": "How can I teleport all stairs to the rooftop for maximum confusion?",
+        "input": "",
+        "output": "stairs = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Stairs).ToElements()\nfor stair in stairs:\n    loc = stair.Location.Point\n    new_loc = XYZ(loc.X, loc.Y, loc.Z + 50)  # Boom! Straight to the roof.\n    stair.Location.Point = new_loc"
+    },
+    {
+        "instruction": "How do I make all windows completely invisible?",
+        "input": "",
+        "output": "windows = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Windows).ToElements()\nfor window in windows:\n    window.LookupParameter(\"Material\").Set(None)  # Transparency Level: 100%"
+    },
+    {
+        "instruction": "What happens if I set all wall heights to 1,000 meters?",
+        "input": "",
+        "output": "walls = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Walls).ToElements()\nfor wall in walls:\n    wall.LookupParameter(\"Unconnected Height\").Set(1000)"
+    },
+    {
+        "instruction": "How do I place a tiny chair at 1,000,000 meters away for no reason at all?",
+        "input": "",
+        "output": "family_symbol = FilteredElementCollector(doc).OfClass(FamilySymbol).FirstElement()\nnew_location = XYZ(1000000, 1000000, 1000000)  # The farthest chair in the universe.\nt = Transaction(doc, \"Place Tiny Chair in Space\")\nt.Start()\ndoc.Create.NewFamilyInstance(new_location, family_symbol, StructureType.NonStructural)\nt.Commit()"
+    },
+    {
+        "instruction": "How can I randomly change all wall colors every time I run the script?",
+        "input": "",
+        "output": "import random\nwalls = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Walls).ToElements()\nfor wall in walls:\n    color = random.randint(0, 255)\n    wall.LookupParameter(\"Material\").Set(f\"RGB({color}, {color}, {color})\")"
+    },
+    {
+        "instruction": "How do I rotate all furniture randomly so no one knows which way to sit?",
+        "input": "",
+        "output": "import random\nfurniture = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Furniture).ToElements()\nfor item in furniture:\n    random_angle = random.uniform(0, 360)  # Degrees\n    item.Location.Rotate(Plane.CreateByNormalAndOrigin(XYZ.BasisZ, item.Location.Point), random_angle)"
+    },
+    {
+        "instruction": "How do I duplicate every door 10 times?",
+        "input": "",
+        "output": "doors = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Doors).ToElements()\nt = Transaction(doc, \"Clone Doors\")\nt.Start()\nfor door in doors:\n    for _ in range(10):\n        doc.Create.NewFamilyInstance(door.Location.Point, door.Symbol, StructureType.NonStructural)\nt.Commit()"
+    }
+]
