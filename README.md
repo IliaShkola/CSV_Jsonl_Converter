@@ -1,7 +1,8 @@
-# CSV-Jsonl Converter
-With this small app, you can easily convert your training data from .csv to .jsonl format according to OpenAI specifications.
+# CSV FineTune Converter
+This lightweight app allows you to effortlessly convert your training data from .csv to .jsonl for OpenAI model fine-tuning or .json for Llama (Alpaca structure) models.
 
-![image](https://github.com/user-attachments/assets/3fdf9810-a11d-40b5-9210-523dac419d8c)
+![Screenshot 2025-02-21 155933](https://github.com/user-attachments/assets/90e581f5-ad3d-4cd5-b215-3713f1aff002)
+
 
 Installation
 ---
@@ -42,7 +43,8 @@ The executable file will be stored in the 'dist' project folder.
 
 Usage
 ---
-To convert a CSV file to JSONL, simply drag and drop the .csv file into the designated area, enter the system prompt in the text box, and click 'Export JSONL'.
+To convert a CSV file to JSONL or JSON, simply drag and drop your .csv file into the designated area. Then, enter the system prompt in the text box and select the output format based on the model you want to fine-tune.
+Alpaca models don't require a system prompt.
 
 CSV requirements
 ---
