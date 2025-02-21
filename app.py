@@ -42,7 +42,7 @@ class MyApp(QMainWindow):
 
     def initUI(self):
         """Initialize UI with drag and drop functionality."""
-        self.setWindowTitle("CSV-JSONL Converter")
+        self.setWindowTitle("CSV FineTune Converter")
 
         # Central widget
         central_widget = QWidget(self)

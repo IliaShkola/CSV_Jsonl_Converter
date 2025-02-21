@@ -16,7 +16,7 @@ from PyInstaller.compat import is_win, is_darwin, is_linux
 # -----------------------------------------------------------------------------
 # App/Main file configuration
 # -----------------------------------------------------------------------------
-app_name = "CSV_JSONL_Converter"
+app_name = "CSV_FineTune_Converter"
 main_script = "app.py"   # replace with the actual name of your main script
 icon_file = None            # e.g. "icon.ico" for Windows, if you have an icon
 
